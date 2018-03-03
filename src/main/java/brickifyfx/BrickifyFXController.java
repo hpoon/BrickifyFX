@@ -34,7 +34,7 @@ import brickifyfx.tiling.TilingMethod;
 
 /**
  * FXML Controller class
- * 
+ *
  * @author Dan
  */
 public class BrickifyFXController implements Initializable {
@@ -48,7 +48,7 @@ public class BrickifyFXController implements Initializable {
 
 	// List of all loaded controllers for easy looping/message sending to all controllers
 	private List<BasePaneController> loadedControllers;
-	
+
 	private ImageCanvasController imageCanvasController;
 
 	// File chooser fields
@@ -56,7 +56,7 @@ public class BrickifyFXController implements Initializable {
 
 	// Crop-related fields
 	private CropPaneController cropPaneController;
-	
+
 	// Bricks and color-related fields
 	private BricksAndColorsPaneController bricksAndColorsPaneController;
 
@@ -84,13 +84,13 @@ public class BrickifyFXController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		originalImage = new Image(getClass().getResourceAsStream("/warhol.jpg"));
+		originalImage = new Image(getClass().getResourceAsStream("/default.png"));
 
-		
+
     	FXMLLoader fxmlLoader;
         try {
-        	fxmlLoader = new FXMLLoader(getClass().getResource("ImageCanvas.fxml"));
-			TabPane canvasPane = (TabPane) fxmlLoader.load();
+        	fxmlLoader = new FXMLLoader(getClass().getResource("/ImageCanvas.fxml"));
+			TabPane canvasPane = fxmlLoader.load();
 			imageCanvasController = fxmlLoader.getController();
 			imageCanvasController.setMainController(this);
 			originalImagePane.getChildren().add(canvasPane);
@@ -100,35 +100,35 @@ public class BrickifyFXController implements Initializable {
 			AnchorPane.setLeftAnchor(canvasPane, Double.valueOf(0.0));
 			loadedControllers.add(imageCanvasController);
 
-			fxmlLoader = new FXMLLoader(getClass().getResource("InfoPane.fxml"));
-			TitledPane infoPane = (TitledPane) fxmlLoader.load();
+			fxmlLoader = new FXMLLoader(getClass().getResource("/InfoPane.fxml"));
+			TitledPane infoPane = fxmlLoader.load();
 			infoPaneController = fxmlLoader.getController();
 			infoPaneController.setMainController(this);
 			titledPaneBox.getChildren().add(infoPane);
 			loadedControllers.add(infoPaneController);
 
-			fxmlLoader = new FXMLLoader(getClass().getResource("LoadPane.fxml"));
-			TitledPane loadPane = (TitledPane) fxmlLoader.load();
+			fxmlLoader = new FXMLLoader(getClass().getResource("/LoadPane.fxml"));
+			TitledPane loadPane = fxmlLoader.load();
 			loadPaneController = fxmlLoader.getController();
 			loadPaneController.setMainController(this);
 			loadPaneController.setInfoText((int)originalImage.getWidth() + " by " + (int)originalImage.getHeight() + " pixels");
 			titledPaneBox.getChildren().add(loadPane);
 			loadedControllers.add(loadPaneController);
 
-			fxmlLoader = new FXMLLoader(getClass().getResource("CropPane.fxml"));
-			TitledPane cropPane = (TitledPane) fxmlLoader.load();
+			fxmlLoader = new FXMLLoader(getClass().getResource("/CropPane.fxml"));
+			TitledPane cropPane = fxmlLoader.load();
 			cropPane.setExpanded(false);
 			cropPaneController = fxmlLoader.getController();
 			cropPaneController.setMainController(this);
 			cropPaneController.imageLoaded(originalImage);
 			titledPaneBox.getChildren().add(cropPane);
 			loadedControllers.add(cropPaneController);
-			
+
 			// TODO - all the circular referencing is icky
 			imageCanvasController.setCropPaneController(cropPaneController);
 
-			fxmlLoader = new FXMLLoader(getClass().getResource("BricksAndColorsPane.fxml"));
-			TitledPane bricksAndColorsPane = (TitledPane) fxmlLoader.load();
+			fxmlLoader = new FXMLLoader(getClass().getResource("/BricksAndColorsPane.fxml"));
+			TitledPane bricksAndColorsPane = fxmlLoader.load();
 			bricksAndColorsPane.setExpanded(false);
 			bricksAndColorsPaneController = fxmlLoader.getController();
 			bricksAndColorsPaneController.setMainController(this);
@@ -136,16 +136,16 @@ public class BrickifyFXController implements Initializable {
 			loadedControllers.add(bricksAndColorsPaneController);
 
 
-			fxmlLoader = new FXMLLoader(getClass().getResource("RenderPane.fxml"));
-			TitledPane renderPane = (TitledPane) fxmlLoader.load();
+			fxmlLoader = new FXMLLoader(getClass().getResource("/RenderPane.fxml"));
+			TitledPane renderPane = fxmlLoader.load();
 			renderPaneController = fxmlLoader.getController();
 			renderPaneController.setMainController(this);
 			titledPaneBox.getChildren().add(renderPane);
 			loadedControllers.add(renderPaneController);
 
 
-			fxmlLoader = new FXMLLoader(getClass().getResource("OutputPane.fxml"));
-			TitledPane outputPane = (TitledPane) fxmlLoader.load();
+			fxmlLoader = new FXMLLoader(getClass().getResource("/OutputPane.fxml"));
+			TitledPane outputPane = fxmlLoader.load();
 			outputPaneController = fxmlLoader.getController();
 			outputPaneController.setMainController(this);
 			titledPaneBox.getChildren().add(outputPane);
@@ -157,18 +157,18 @@ public class BrickifyFXController implements Initializable {
 
 	}
 
-	public void loadImage(File imageFile) throws FileNotFoundException, IOException {
+	public void loadImage(File imageFile) throws IOException {
 		try (FileInputStream fis = new FileInputStream(imageFile)) {
 			originalImage = new Image(fis);
 		}
-		
+
 		currentImageFile = imageFile;
-		
+
 		// Reset mosaic
 		mosaicImage = null;
 		bricksAndColors = null;
 		mosaic = null;
-	
+
 		for (BasePaneController basePaneController : loadedControllers) {
 			basePaneController.imageLoaded(originalImage);
 		}
@@ -179,7 +179,6 @@ public class BrickifyFXController implements Initializable {
 	public ImageCanvasController getImageCanvasController() {
 		return imageCanvasController;
 	}
-
 
 	public CropPaneController getCropPaneController() {
 		return cropPaneController;
@@ -206,7 +205,7 @@ public class BrickifyFXController implements Initializable {
 	}
 
 	protected void render(int outputWidth, int outputHeight, QuantisationMethod quantisationMethod, boolean threeDEffect) {
-		
+
 		long start = System.nanoTime();
 
 		double longestDesiredDimension;
@@ -243,7 +242,7 @@ public class BrickifyFXController implements Initializable {
 					mosaicWidth = (int) Math.round(mosaicSourceImage.getWidth() * scale);
 					mosaicHeight = (int) Math.round(mosaicSourceImage.getHeight() * scale);
 				}
-	
+
 			}
 		} else {
 			mosaicSourceImage = new WritableImage(originalImage.getPixelReader(),
@@ -271,25 +270,25 @@ public class BrickifyFXController implements Initializable {
 					double cropWidth = originalImageCropRectangle.getWidth();
 					double cropHeight = originalImageCropRectangle.getHeight();
 					if (cropWidth >= cropHeight) {
-						scale = longestDesiredDimension / cropWidth; 
+						scale = longestDesiredDimension / cropWidth;
 					} else {
 						scale = longestDesiredDimension / cropHeight;
 					}
 					scale = Math.min(1.0, scale);
-					
+
 					mosaicWidth = (int) Math.round(cropWidth * scale);
 					mosaicHeight = (int) Math.round(cropHeight * scale);
 				}
 
 			}
 		}
-		
+
 		mosaic = new Mosaic(mosaicWidth, mosaicHeight);
 		bricksAndColors = new BricksAndColors(bricksAndColorsPaneController.getBrickSet(), bricksAndColorsPaneController.getColorPalette());
-		
+
 		long startMemory = Runtime.getRuntime().freeMemory();
 		Calculation calculation = new Calculation();
-		
+
 		BufferedImage cutout = calculation.scale(SwingFXUtils.fromFXImage(mosaicSourceImage, null),
 				mosaicWidth,
 				mosaicHeight,
@@ -324,7 +323,7 @@ public class BrickifyFXController implements Initializable {
 		end = System.nanoTime();
 		System.out.format("Image generation done in %,dns\n", Long.valueOf(end-start));
 
-		
+
 		for (BasePaneController basePaneController : loadedControllers) {
 			basePaneController.mosaicRendered(bricksAndColors, quantisationMethod, threeDEffect, mosaicImage);
 		}

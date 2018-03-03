@@ -16,6 +16,7 @@ public class Brick {
 	private final String name;
 	private final int stability;
 	private final String ldrawFile;
+	private int rotation;
 
 	/**
 	 * constructor
@@ -24,7 +25,7 @@ public class Brick {
 	 * @param matrix
 	 * @param stability
 	 */
-	public Brick(String name, boolean[][] matrix, int stability, String ldrawFile) {
+	public Brick(String name, boolean[][] matrix, int rotation, int stability, String ldrawFile) {
 		assertMatrixOkay(matrix);
 		this.width = matrix[0].length;
 		this.height = matrix.length;
@@ -40,6 +41,7 @@ public class Brick {
 		this.isRectangular = rectangular;
 		this.matrix = matrix;
 		this.name = name;
+		this.rotation = rotation;
 		this.stability = stability;
 		if (ldrawFile.endsWith(".dat")) {
 			this.ldrawFile = ldrawFile;
@@ -121,6 +123,13 @@ public class Brick {
 	public boolean[][] getMatrix() {
 		return matrix;
 	}
+
+	/**
+	 * returns the rotation angle in degrees
+	 *
+	 * @return rotation angle in degrees
+	 */
+	public int getRotation() { return rotation; }
 
 	/**
 	 * returns the stability

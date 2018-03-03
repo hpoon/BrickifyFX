@@ -15,7 +15,7 @@ public class BrickifyFX extends Application {
 
 	@Override
 	public void start(Stage stage) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BrickifyFX.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/BrickifyFX.fxml"));
 		Parent root = (Parent) fxmlLoader.load();
 		Scene scene = new Scene(root);
 

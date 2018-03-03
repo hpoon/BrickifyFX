@@ -46,4 +46,68 @@ public class MathUtils {
 			return (byte)converted;
 		}
 	}
+
+	public static double[][] calculateTransformation(int rotation, double width, double height, boolean isRectangular) {
+		double rotationRad = convertDegreesToRadians(rotation);
+		// For corners, they are not centered in the middle, but rather on the corner
+		// I've only ever seen the corners go like this |¯, and this *should* generalise, but I haven't been able to
+		// test it with corners in other orientations.  I'm basically translating it by a quarter so the center of
+		// rotation becomes the same center as like a 2x2 piece
+		double[][] cornerTranslationMatrix = {
+			{ 1, 0, 0, 0 },
+			{ 0, 1, 0, 0 },
+			{ 0, 0, 1, 0 },
+			{ width / 4.0, 0, height / 4.0, 1 }
+		};
+		double[][] rotationMatrix = {
+			{ Math.cos(rotationRad), 0, Math.sin(rotationRad), 0 },
+			{ 0, 1, 0, 0 },
+			{ -Math.sin(rotationRad), 0, Math.cos(rotationRad), 0 },
+			{ 0, 0, 0, 1 }
+		};
+		double[][] translationMatrix = {
+			{ 1, 0, 0, 0 },
+			{ 0, 1, 0, 0 },
+			{ 0, 0, 1, 0 },
+			// Right is +X and down is -Z in LDraw for some reason
+			{ width / 2.0, 0, -height / 2.0, 1 },
+		};
+		if (isRectangular) {
+			return mmult(rotationMatrix, translationMatrix);
+		} else {
+			return mmult(mmult(cornerTranslationMatrix, rotationMatrix), translationMatrix);
+		}
+	}
+
+	private static double convertDegreesToRadians(int degrees) {
+		return degrees * Math.PI / 180;
+	}
+
+	private static double[][] mmult(double[][] a, double[][] b) {
+		int aRows = a.length;
+		int aColumns = a[0].length;
+		int bRows = b.length;
+		int bColumns = b[0].length;
+
+		if (aColumns != bRows) {
+			throw new IllegalArgumentException("A:Rows: " + aColumns + " did not match B:Columns " + bRows + ".");
+		}
+
+		double[][] c = new double[aRows][bColumns];
+		for (int i = 0; i < aRows; i++) {
+			for (int j = 0; j < bColumns; j++) {
+				c[i][j] = 0.00000;
+			}
+		}
+
+		for (int i = 0; i < aRows; i++) { // aRow
+			for (int j = 0; j < bColumns; j++) { // bColumn
+				for (int k = 0; k < aColumns; k++) { // aColumn
+					c[i][j] += a[i][k] * b[k][j];
+				}
+			}
+		}
+
+		return c;
+	}
 }
