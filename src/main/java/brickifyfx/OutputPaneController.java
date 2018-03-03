@@ -9,7 +9,6 @@ import java.awt.image.PixelGrabber;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,58 +29,43 @@ public class OutputPaneController extends BasePaneController {
 	@FXML
 	private TitledPane titledPane;
 	@FXML
-	private Button saveImageButton;
-	@FXML
-	private Button saveLdrawButton;
+	private Button saveButton;
 
 	private File lastSaveFolder;
-	
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		titledPane.setExpanded(false);
 	}
 
 	@FXML
-	protected void handleSaveImage(@SuppressWarnings("unused") ActionEvent event) {
-		
+	protected void handleSave(@SuppressWarnings("unused") ActionEvent event) {
+
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG File", "*.png"),
-				new FileChooser.ExtensionFilter("JPEG File", "*.jpg", "*.jpeg"),
-				new FileChooser.ExtensionFilter("GIF File", "*.gif"));
-		fileChooser.setTitle("Save Mosaic Image");
+		fileChooser.setTitle("Save Mosaic");
 
-		String format = null;
-		File chosenFile = showSaveDialog(fileChooser, "mosaic.png", ".png", "_mosaic");
+		File baseFile = showSaveDialog(fileChooser, "mosaic");
 
-		if (chosenFile == null) {
+		if (baseFile == null) {
 			return;
 		}
-		
-		String chosenFileName = chosenFile.getName().toLowerCase();
-		if (chosenFileName.endsWith(".png")) {
-			format = "png";
-		} else if (chosenFileName.endsWith(".jpg") || chosenFileName.endsWith(".jpeg")) {
-			format = "jpg";
-		} else if (chosenFileName.endsWith(".gif")) {
-			format = "gif";
-		} else {
-			format = "png";
-			chosenFile = new File(chosenFile.getParent(), chosenFile.getName() + ".png");
-		}
-		
-		System.out.println("Save file " + chosenFile);
+
+		final File imageFile = new File(baseFile.getAbsolutePath() + ".png");
+		final File lDrawFile = new File(baseFile.getAbsolutePath() + ".ldr");
+
+		System.out.println("Save file " + baseFile);
 
 		try {
-			ImageIO.write(getImageToWrite(), format, chosenFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		} catch (InterruptedException e) {
+			// Save image
+			ImageIO.write(getImageToWrite(), "png", imageFile);
+			// Save LDraw
+			new LdrawOutput().saveLdraw(lDrawFile, mainController.getBricksAndColors(), mainController.getMosaic());
+		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
 
-		lastSaveFolder = chosenFile.getParentFile();
+		lastSaveFolder = baseFile.getParentFile();
 	}
 
 	/**
@@ -100,72 +84,40 @@ public class OutputPaneController extends BasePaneController {
 		DataBuffer buffer = new DataBufferInt((int[]) pg.getPixels(), pg.getWidth() * pg.getHeight());
 		WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, RGB_MASKS, null);
 		BufferedImage bi = new BufferedImage(rgbOpaque, raster, false, null);
-		
+
 		return bi;
 	}
 
-	@FXML
-	protected void handleSaveLdraw(@SuppressWarnings("unused") ActionEvent event) throws IOException {
-		
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("LDraw File", "*.ldr"));
-		fileChooser.setTitle("Save As LDraw");
-
-		File chosenFile = showSaveDialog(fileChooser, "mosaic.ldr", ".ldr", null);
-
-		if (chosenFile == null) {
-			return;
-		}
-		
-		System.out.println("Save file as LDraw" + chosenFile);
-		lastSaveFolder = chosenFile.getParentFile();
-
-		new LdrawOutput().saveLdraw(chosenFile, mainController.getBricksAndColors(), mainController.getMosaic());
-	}
-	
-	private File showSaveDialog(FileChooser fileChooser, String defaultFileName, String fileExtension, String suggestedFileSuffix) {
+	private File showSaveDialog(FileChooser fileChooser, String defaultFileName) {
 		File imageFile = mainController.getCurrentImageFile();
-		
+
 		File initialDirectory;
-		String suggestedFileName = null;
 		if (imageFile == null) {
 			if (lastSaveFolder == null) {
 				initialDirectory = new File(System.getProperty("user.home"));
 			} else {
 				initialDirectory = lastSaveFolder;
 			}
-			suggestedFileName = defaultFileName;
 		} else {
 			initialDirectory = imageFile.getParentFile();
-			String fileName = imageFile.getName();
-			int extensionPos = fileName.lastIndexOf('.');
-			if (suggestedFileSuffix != null) {
-				suggestedFileName = fileName.substring(0, extensionPos) + suggestedFileSuffix + fileName.substring(extensionPos);
-			} else if (fileExtension != null) {
-				suggestedFileName = fileName.substring(0, extensionPos) + fileExtension;
-			}
 		}
 
 		fileChooser.setInitialDirectory(initialDirectory);
-		fileChooser.setInitialFileName(suggestedFileName);
+		fileChooser.setInitialFileName(defaultFileName);
 
 		return fileChooser.showSaveDialog(titledPane.getScene().getWindow());
-		
 	}
 
 	@Override
 	public void imageLoaded(Image newImage) {
 		// Disable "save" fields
-		saveImageButton.setDisable(true);
-		saveLdrawButton.setDisable(true);
+		saveButton.setDisable(true);
 		titledPane.setExpanded(false);
 	}
 
 	@Override
 	public void mosaicRendered(BricksAndColors bricksAndColors, QuantisationMethod quantisationMethod, boolean threeDEffect, Image mosaicImage) {
-		saveImageButton.setDisable(false);
-		saveLdrawButton.setDisable(false);
+		saveButton.setDisable(false);
 		titledPane.setExpanded(true);
 	}
-
 }
