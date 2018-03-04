@@ -47,7 +47,7 @@ public class LdrawOutput {
 							transformation[0][0], transformation[0][1], transformation[0][2],
 							transformation[1][0], transformation[1][1], transformation[1][2],
 							transformation[2][0], transformation[2][1], transformation[2][2],
-							brick.getLdrawFile()));
+							brick.getLdrawFile()).replace(",", "."));
 				}
 				xCoord += BASE_WIDTH;
 			}
