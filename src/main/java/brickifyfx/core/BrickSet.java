@@ -40,13 +40,11 @@ public class BrickSet {
 		boolean[][] plate_8x1			= 	{TRUE8};
 		boolean[][] plate_1x8			= 	{TRUE1,TRUE1,TRUE1,TRUE1,TRUE1,TRUE1,TRUE1,TRUE1};
 		boolean[][] plate_2x2			= 	{TRUE2,TRUE2};
-		boolean[][] plate_2x2_Corner	= 	{TRUE2,{true,false}};
 		boolean[][] plate_2x3			= 	{TRUE2,TRUE2,TRUE2};
 		boolean[][] plate_2x4			= 	{TRUE2,TRUE2,TRUE2,TRUE2};
 		boolean[][] plate_2x6			= 	{TRUE2,TRUE2,TRUE2,TRUE2,TRUE2,TRUE2};
 		boolean[][] plate_2x8			= 	{TRUE2,TRUE2,TRUE2,TRUE2,TRUE2,TRUE2,TRUE2,TRUE2};
 		boolean[][] plate_4x4			= 	{TRUE4,TRUE4,TRUE4,TRUE4};
-		boolean[][] plate_4x4_Corner	= 	{TRUE4,TRUE4,{true,true,false,false},{true,true,false,false}};
 		boolean[][] plate_4x6			= 	{TRUE4,TRUE4,TRUE4,TRUE4,TRUE4,TRUE4};
 		boolean[][] plate_4x8			= 	{TRUE4,TRUE4,TRUE4,TRUE4,TRUE4,TRUE4,TRUE4,TRUE4};
 		boolean[][] plate_6x6			= 	{TRUE6,TRUE6,TRUE6,TRUE6,TRUE6,TRUE6};
@@ -63,11 +61,19 @@ public class BrickSet {
 				new Brick("Plate 1 x 3", plate_1x3, -90, 1, "3623"),
 				new Brick("Plate 4 x 1", plate_1x4, 0, 1, "3710"),
 				new Brick("Plate 1 x 4", plate_1x4, -90, 1, "3710"),
-				new Brick("Plate 2 x 2 Corner", plate_2x2_Corner, 0, 1, "2420"),
-				new Brick("Plate 2 x 2 Corner 90", plate_2x2_Corner, -90, 1, "2420"),
-				new Brick("Plate 2 x 2 Corner 180", plate_2x2_Corner, 180, 1, "2420"),
-				new Brick("Plate 2 x 2 Corner 270", plate_2x2_Corner, 90, 1, "2420"),
+				new Brick("Plate 6 x 1", plate_1x6, 0, 1, "3666"),
+				new Brick("Plate 1 x 6", plate_1x6, -90, 1, "3666"),
+				new Brick("Plate 8 x 1", plate_1x8, 0, 1, "3460"),
+				new Brick("Plate 1 x 8", plate_1x8, -90, 1, "3460"),
 				new Brick("Plate 2 x 2", plate_2x2, 0, 1, "3022"),
+				new Brick("Plate 3 x 2", plate_2x3, 0, 1, "3021"),
+				new Brick("Plate 2 x 3", plate_2x3, -90, 1, "3021"),
+				new Brick("Plate 4 x 2", plate_2x4, 0, 1, "3020"),
+				new Brick("Plate 2 x 4", plate_2x4, -90, 1, "3020"),
+				new Brick("Plate 6 x 2", plate_2x6, 0, 1, "3795"),
+				new Brick("Plate 2 x 6", plate_2x6, -90, 1, "3795"),
+				new Brick("Plate 8 x 2", plate_2x8, 0, 1, "3034"),
+				new Brick("Plate 2 x 8", plate_2x8, -90, 1, "3034"),
 		};
 		TOP_BRICKS = new Brick[] {
 			new Brick("Plate 2 x 1", plate_1x2, 0, 1, "3023"),
@@ -80,10 +86,6 @@ public class BrickSet {
 			new Brick("Plate 1 x 6", plate_1x6, -90, 1, "3666"),
 			new Brick("Plate 8 x 1", plate_1x8, 0, 1, "3460"),
 			new Brick("Plate 1 x 8", plate_1x8, -90, 1, "3460"),
-			new Brick("Plate 2 x 2 Corner", plate_2x2_Corner, 0, 1, "2420"),
-			new Brick("Plate 2 x 2 Corner 90", plate_2x2_Corner, -90, 1, "2420"),
-			new Brick("Plate 2 x 2 Corner 180", plate_2x2_Corner, 180, 1, "2420"),
-			new Brick("Plate 2 x 2 Corner 270", plate_2x2_Corner, 90, 1, "2420"),
 			new Brick("Plate 2 x 2", plate_2x2, 0, 1, "3022"),
 			new Brick("Plate 3 x 2", plate_2x3, 0, 1, "3021"),
 			new Brick("Plate 2 x 3", plate_2x3, -90, 1, "3021"),
@@ -94,10 +96,6 @@ public class BrickSet {
 			new Brick("Plate 8 x 2", plate_2x8, 0, 1, "3034"),
 			new Brick("Plate 2 x 8", plate_2x8, -90, 1, "3034"),
 			new Brick("Plate 4 x 4", plate_4x4, 0, 1, "3031"),
-			new Brick("Plate 4 x 4 Corner", plate_4x4_Corner, 0, 1, "2639"),
-			new Brick("Plate 4 x 4 Corner 90", plate_4x4_Corner, -90, 1, "2639"),
-			new Brick("Plate 4 x 4 Corner 180", plate_4x4_Corner, 180, 1, "2639"),
-			new Brick("Plate 4 x 4 Corner 270", plate_4x4_Corner, 90, 1, "2639"),
 			new Brick("Plate 6 x 4", plate_4x6, 0, 1, "3032"),
 			new Brick("Plate 4 x 6", plate_4x6, -90, 1, "3032"),
 			new Brick("Plate 8 x 4", plate_4x8, 0, 1, "3035"),
@@ -107,7 +105,6 @@ public class BrickSet {
 			new Brick("Plate 6 x 8", plate_6x8, -90, 1, "3036"),
 			new Brick("Plate 8 x 8", plate_8x8, 0, 1, "41539"),
 		};
-		
 
 		// Side-on
 		boolean[][] brick_1x1			= 	{TRUE1,TRUE1,TRUE1};
@@ -131,7 +128,7 @@ public class BrickSet {
 				new Brick("Brick 1 x 4", brick_1x4, 0, 4, "3010"),
 				new Brick("Brick 1 x 6", brick_1x6, 0, 5, "3009"),
 				new Brick("Brick 1 x 8", brick_1x8, 0, 6, "3008")
-				
+
 		};
 	}
 
@@ -142,14 +139,14 @@ public class BrickSet {
 	public static final BrickSet SIDE_ON = new BrickSet("Side-on plates and bricks", false, PLATE_BASIC_SIDE, 5, 2, Arrays.asList(SIDE_BRICKS));
 
 	//////////////////////////////////////////////////////////////
-	
+
 	private final String name;
 	private final boolean topDown;
 	private final Brick basicBrick;
 	private final List<Brick> bricks;
 	private final int basicBrickWidthRatio;
 	private final int basicBrickHeightRatio;
-	
+
 	private BrickSet(String name, boolean topDown, Brick basicBrick, int basicBrickWidthRatio, int basicBrickHeightRatio, List<Brick> bricks) {
 		this.name = name;
 		this.topDown = topDown;
@@ -178,11 +175,11 @@ public class BrickSet {
 	public Brick getBasicBrick() {
 		return basicBrick;
 	}
-	
+
 	public Collection<Brick> getAllBricks() {
 		return bricks;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;

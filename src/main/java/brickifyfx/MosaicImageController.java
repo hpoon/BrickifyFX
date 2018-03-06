@@ -26,11 +26,11 @@ public class MosaicImageController {
 	private MosaicImageZoomState mosaicImageZoomState;
 
 	private ImageCanvasController parentController;
-	
+
 	private enum MosaicImageZoomState {
 		NO_ZOOM, ONE_TO_ONE, OVERLAY_ORIGINAL;
 	}
-	
+
 	public MosaicImageController(ImageCanvasController imageCanvasController, Image mosaicImage, String tabName) {
 		this.parentController = imageCanvasController;
 
@@ -40,7 +40,7 @@ public class MosaicImageController {
 		mosaicImageAnchorPane = new AnchorPane(mosaicImageView);
 		mosaicImageAnchorPane.setMinHeight(100.0);
 		mosaicImageAnchorPane.setMinWidth(100.0);
-		
+
 		mosaicImageTab = new Tab(tabName, mosaicImageAnchorPane);
 		mosaicImageTab.setClosable(true);
 		mosaicImageTab.setOnClosed(event -> parentController.tabClosed(MosaicImageController.this));
@@ -54,7 +54,7 @@ public class MosaicImageController {
 		};
 		mosaicImageAnchorPane.heightProperty().addListener(mosaicImageSizeChangeListener);
 		mosaicImageAnchorPane.widthProperty().addListener(mosaicImageSizeChangeListener);
-		
+
 		// Annoying order of events goes:
 		//   pressed->dragged->released->clicked
 		// However, if the mouse is released outside the window after dragging, the order is
@@ -84,7 +84,7 @@ public class MosaicImageController {
 					mosaicImageView.setTranslateY(originalTranslateY + mouseEvent.getY() - mosaicImageDragOrigin.getY());
 				}
 			}
-			
+
 		});
 		mosaicImageAnchorPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -127,17 +127,16 @@ public class MosaicImageController {
 					break;
 				default:
 					break;
-
 				}
 			}
 		});
 	}
-	
+
 	void resetImage(Image mosaicImage) {
 		mosaicImageView.setImage(mosaicImage);
 		updateMosaicImage();
 	}
-	
+
 	private void updateMosaicImage() {
 		double apWidth = mosaicImageAnchorPane.getWidth() - 20.0;
 		double imgWidth = mosaicImageView.getImage().getWidth();
@@ -161,6 +160,6 @@ public class MosaicImageController {
 		return mosaicImageTab;
 	}
 
-	
+
 
 }
